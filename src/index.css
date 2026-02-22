@@ -1,0 +1,52 @@
+body {
+  background: url("https://images.template.net/359853/Star-Wars-Art-Background-Template-edit-online-1.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: 'Star Wars', sans-serif;
+}
+
+.main-logo {
+  width: 200px;
+}
+
+.btn {
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  border: 0;
+}
+
+.sw-title {
+    font-family: 'Star Wars', sans-serif;
+    letter-spacing: 2px;
+}
+
+.sw-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+
+.img-container {
+    height: 250px; 
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.img-container img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain; 
+}
+
+
+.text-limit {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
