@@ -1,5 +1,5 @@
 body {
-  background: url("https://images.template.net/359853/Star-Wars-Art-Background-Template-edit-online-1.jpg");
+  background: url(src/assets/img/Star Wars Art Background Template.png);
   background-size: cover;
   background-attachment: fixed;
   font-family: 'Star Wars', sans-serif;
@@ -11,7 +11,7 @@ body {
 
 .btn {
   background-color: rgba(0, 0, 0, 0);
-  color: white;
+  color: #ccc;
   border: 0;
 }
 
@@ -34,6 +34,7 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    border-radius: 20px 20px 0 0;
 }
 
 .img-container img {
@@ -49,4 +50,39 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.btn-heart {
+    background: transparent;
+    border: 1px solid #ffc107; 
+    color: #ffc107;
+    transition: all 0.3s ease;
+    padding: 0.375rem 0.75rem;
+    border-radius: 5px;
+}
+
+.btn-heart:hover {
+    color: #ff6600; 
+    border-color: #ff6600;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); 
+    transform: scale(1.1);
+}
+
+
+.card-footer-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.card {
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); 
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0 20px rgba(255, 232, 31, 0.4);
 }

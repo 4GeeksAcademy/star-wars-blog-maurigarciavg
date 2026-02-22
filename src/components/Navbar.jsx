@@ -11,10 +11,10 @@ export const Navbar = () => {
 				</Link>
 				<div className="ml-auto">
 					<Link to="/demo">
-						<span className="btn btn-primary">Home</span>
-						<span className="btn btn-primary">Characters</span>
-						<span className="btn btn-primary">Planets</span>
-						<span className="btn btn-primary">STARSHIPS</span>
+						<span className="btn btn-secondary">home</span>
+						<span className="btn btn-secondary">characters</span>
+						<span className="btn btn-secondary">planets</span>
+						<span className="btn btn-secondary">starships</span>
 						<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Favorites
 							</button>
