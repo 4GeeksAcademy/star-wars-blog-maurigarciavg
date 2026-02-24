@@ -1,36 +1,143 @@
-// Import necessary hooks and components from react-router-dom and other libraries.
-import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
-import PropTypes from "prop-types";  // To define prop types for this component
-import useGlobalReducer from "../hooks/useGlobalReducer";  // Import a custom hook for accessing the global state
 
-// Define and export the Single component which displays individual item details.
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useEffect, useState } from "react";
+import './detail.css'
+import { useNavigate } from "react-router-dom";
+
+
 export const Detail = props => {
-  // Access the global state using the custom hook.
-  const { store } = useGlobalReducer()
+    const { store } = useGlobalReducer();
+    const { categoryId, theId } = useParams();
+    const [Details, setDetails] = useState(null);
+    const navigate = useNavigate();
 
-  // Retrieve the 'theId' URL parameter using useParams hook.
-  const { theId } = useParams()
-  const detailTodo = store.todos.find(todo => todo.id === parseInt(theId));
+    const getDetails = async () => {
+        const apiCategory = categoryId === "characters" ? "people" : categoryId;
 
-  return (
-    <div className="container text-center">
-      {/* Display the title of the todo element dynamically retrieved from the store using theId. */}
-      <h1 className="display-4">Todo: {detailTodo?.title}</h1>
-      <hr className="my-4" />  {/* A horizontal rule for visual separation. */}
+        const data = await fetch(`https://www.swapi.tech/api/${apiCategory}/${theId}`);
+        const result = await data.json();
 
-      {/* A Link component acts as an anchor tag but is used for client-side routing to prevent page reloads. */}
-      <Link to="/">
-        <span className="btn btn-primary btn-lg" href="#" role="button">
-          Back home
-        </span>
-      </Link>
-    </div>
-  );
+        setDetails(result.result);
+    };
+
+    useEffect(() => {
+        getDetails()
+    }, []);
+    if (!Details) {
+        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>;
+    }
+
+    return (
+        <div>
+
+            <div className="container mt-5 p-4 detail-container">
+
+                <h1> {Details.properties.name.toLowerCase()}</h1>
+                <div className="row mb-4">
+                    <div className="col-md-6">
+                        <img src={`https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/${categoryId}/${theId}.jpg`} />
+                    </div>
+                    <div className="col-md-6 text-center">
+                        {Details.description}
+                    </div>
+                </div>
+
+
+                <hr className="border-danger border-2 opacity-75" />
+
+
+                <div className="row text-danger text-center mt-3">
+                    <div className="col">
+
+                        <div className="fw-bold">
+                            {categoryId === "characters" ? "Birth Year" :
+                                categoryId === "planets" ? "Climate" :
+                                    "Model"}
+                        </div>
+
+
+                        <div className="text-muted">
+                            {categoryId === "characters" ? Details.properties.birth_year :
+                                categoryId === "planets" ? Details.properties.climate :
+                                    Details.properties.model}
+                        </div>
+                    </div>
+
+                    <div className="col">
+                        <div className="fw-bold">
+                            {categoryId === "characters" ? "Gender" :
+                                categoryId === "planets" ? "Terrain" :
+                                    "Starship Class"}
+                        </div>
+                        <div className="text-muted">
+                            {categoryId === "characters" ? Details.properties.gender :
+                                categoryId === "planets" ? Details.properties.terrain :
+                                    Details.properties.starship_class}
+                        </div>
+                    </div>
+
+
+                    <div className="col">
+                        <div className="fw-bold">
+                            {categoryId === "characters" ? "Height" :
+                                categoryId === "planets" ? "Population" :
+                                    "Manufacturer"}
+                        </div>
+                        <div className="text-muted">
+                            {categoryId === "characters" ? Details.properties.height :
+                                categoryId === "planets" ? Details.properties.population :
+                                    Details.properties.manufacturer}
+                        </div>
+                    </div>
+
+
+                    <div className="col">
+                        <div className="fw-bold">
+                            {categoryId === "characters" ? "Skin Color" :
+                                categoryId === "planets" ? "Diameter" :
+                                    "Cost"}
+                        </div>
+                        <div className="text-muted">
+                            {categoryId === "characters" ? Details.properties.skin_color :
+                                categoryId === "planets" ? Details.properties.diameter :
+                                    Details.properties.cost_in_credits}
+                        </div>
+                    </div>
+
+
+                    <div className="col">
+                        <div className="fw-bold">
+                            {categoryId === "characters" ? "Eye Color" :
+                                categoryId === "planets" ? "Gravity" :
+                                    "Length"}
+                        </div>
+                        <div className="text-muted">
+                            {categoryId === "characters" ? Details.properties.eye_color :
+                                categoryId === "planets" ? Details.properties.gravity :
+                                    Details.properties.length}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <button
+                className="btn btn-outline-warning mb-4"
+                onClick={() => navigate("/")}
+            >
+                <i className="bi bi-arrow-left"></i> Volver a la Galaxia
+            </button>
+        </div>
+
+    );
+
 };
 
 // Use PropTypes to validate the props passed to this component, ensuring reliable behavior.
 Detail.propTypes = {
-  // Although 'match' prop is defined here, it is not used in the component.
-  // Consider removing or using it as needed.
-  match: PropTypes.object
+    // Although 'match' prop is defined here, it is not used in the component.
+    // Consider removing or using it as needed.
+    match: PropTypes.object
 };

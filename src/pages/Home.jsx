@@ -32,7 +32,7 @@ export const Home = () => {
 		getStarships();
 	}, []);
 
-
+	
 	return (
 		<div className="container mt-5">
 			<div className="container text-center mt-5">
@@ -48,7 +48,7 @@ export const Home = () => {
 								name={item.name}
 								uid={item.uid}
 								category="characters"
-								description="Un gran caballero jedi capacitado en las artes de la fuerza."
+								description={"Un gran caballero jedi capacitado en las artes de la fuerza."}
 							/>
 						))}
 					</div>

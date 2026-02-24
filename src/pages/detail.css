@@ -1,0 +1,25 @@
+.detail-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #ffc107; 
+    border-radius: 15px;
+    padding: 30px;
+    color: white; 
+    backdrop-filter: blur(10px);
+}
+
+
+.detail-container h1, 
+.detail-container .fw-bold {
+    font-family: 'Star Wars', sans-serif; 
+    letter-spacing: 1px;
+    color: #ffc107; 
+}
+
+
+.detail-container .text-muted, 
+.detail-container .col-md-6 {
+    font-family: 'Segoe UI', Roboto, sans-serif; 
+    color: #e0e0e0 !important; 
+    font-size: 1.1rem;
+}
+

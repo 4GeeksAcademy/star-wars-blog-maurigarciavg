@@ -1,5 +1,5 @@
-body {
-    background: url(src/assets/img/Star Wars Art Background Template.png);
+body {background: url(/src/assets/img/star-wars-art-background-template.png);
+    
     background-size: cover;
     background-attachment: fixed;
     font-family: 'Star Wars', sans-serif;
