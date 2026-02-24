@@ -1,9 +1,23 @@
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Card = (props) => {
-    const handleImgError = (e) => {
-        e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+    const { store, actions } = useGlobalReducer();
+
+    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category);
+
+    const handleFavoriteClick = () => {
+        if (isFavorite) {
+            actions.deleteFavorite(props.uid);
+        } else {
+            actions.addFavorite({
+                name: props.name,
+                uid: props.uid,
+                category: props.category
+            });
+        }
     };
+
 
     return (
         <div className="carousel-card">
@@ -11,7 +25,10 @@ export const Card = (props) => {
                 <div className="img-container">
                     <img
                         src={`https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`}
-                        onError={(e) => { e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg"; }}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+                        }}
                         alt={props.name}
                     />
                 </div>
@@ -22,7 +39,12 @@ export const Card = (props) => {
                         <Link to={`/${props.category}/${props.uid}`} className="btn btn-outline-warning">
                             Ver detalles
                         </Link>
-                        <button className="btn-heart"><i className="bi bi-heart"></i></button>
+                        <button
+                            className={`btn-heart ${isFavorite ? "active" : ""}`}
+                            onClick={handleFavoriteClick}
+                        >
+                            <i className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}></i>
+                        </button>
                     </div>
                 </div>
             </div>

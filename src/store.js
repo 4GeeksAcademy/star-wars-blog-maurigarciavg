@@ -1,5 +1,5 @@
-export const initialStore=()=>{
-  return{
+export const initialStore = () => {
+  return {
     message: null,
     characters: [],
     planets: [],
@@ -9,22 +9,34 @@ export const initialStore=()=>{
 }
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-   case 'set_characters':
-    return {
+
+  switch (action.type) {
+    case 'set_characters':
+      return {
         ...store,
         characters: action.payload
-    };
+      };
     case 'set_planets':
-    return {
+      return {
         ...store,
         planets: action.payload
-    };
+      };
     case 'set_starships':
-    return {
+      return {
         ...store,
         starships: action.payload
-    };
+      };
+    case 'add_favorite':
+      console.log("¡Favorito recibido en el store!", action.payload);
+      return {
+        ...store,
+        favorites: [...store.favorites, action.payload]
+      };
+    case 'delete_favorite':
+      return {
+        ...store,
+        favorites: store.favorites.filter((fav) => fav.uid !== action.payload)
+      };
     default:
       throw Error('Unknown action.');
   };
