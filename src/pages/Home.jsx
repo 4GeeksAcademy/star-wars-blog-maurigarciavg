@@ -7,7 +7,6 @@ export const Home = () => {
     const scrollCharactersRef = useRef(null);
     const scrollPlanetsRef = useRef(null);
     const scrollStarshipsRef = useRef(null);
-
     const getCharacters = async () => {
         const data = await fetch("https://www.swapi.tech/api/people");
         const result = await data.json();

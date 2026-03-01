@@ -5,7 +5,6 @@ import starWarsLogo from "/src/assets/img/star-wars-logo.png";
 export const Navbar = () => {
 	const { store, actions } = useGlobalReducer();
 
-
 	return (
 		<nav className="navbar navbar-dark">
 			<div className="container">

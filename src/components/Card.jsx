@@ -1,9 +1,21 @@
+import tatooineImg from "../assets/img/Tatooine.webp";
+import cr90Img from "../assets/img/cr90_corvette.jpg";
+import starDestroyerImg from "../assets/img/star_destroyer.jpg";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Card = (props) => {
     const { store, actions } = useGlobalReducer();
 
+    const getImageUrl = () => {
+        const name = props.name.toLowerCase();
+
+        if (name === "tatooine") return tatooineImg;
+        if (name === "cr90 corvette") return cr90Img;
+        if (name === "star destroyer") return starDestroyerImg;
+
+        return `https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`;
+    };
     const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category);
 
     const handleFavoriteClick = () => {
@@ -18,13 +30,12 @@ export const Card = (props) => {
         }
     };
 
-
     return (
         <div className="carousel-card">
             <div className="card h-100 bg-dark border-secondary">
                 <div className="img-container">
                     <img
-                        src={`https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`}
+                        src={getImageUrl()}
                         onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
