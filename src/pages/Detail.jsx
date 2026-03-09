@@ -1,126 +1,180 @@
-import tatooineImg from "../assets/img/Tatooine.webp";
-import cr90Img from "../assets/img/cr90_corvette.jpg";
-import starDestroyerImg from "../assets/img/star_destroyer.jpg";
-import { useParams, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
-import './detail.css';
+import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import {
+	buildFallbackImage,
+	getDetailEntries,
+	getPrimaryHighlights,
+	getResourceImageUrl,
+	getTypeNarrative,
+	isSupportedType,
+	loadDetail,
+	normalizeResourceType,
+	RESOURCE_CONFIG
+} from "../services/swapi";
+import "./detail.css";
 
 export const Detail = () => {
-    const { categoryId, theId } = useParams();
-    const [Details, setDetails] = useState(null);
-    const navigate = useNavigate();
+	const { type, uid } = useParams();
+	const canonicalType = normalizeResourceType(type);
+	const { store, dispatch } = useGlobalReducer();
+	const safeUid = String(uid);
+	const cachedDetail = isSupportedType(canonicalType)
+		? store.detailCache[canonicalType][safeUid]
+		: null;
+	const catalogItem = isSupportedType(canonicalType)
+		? store.catalog[canonicalType].find((item) => item.uid === safeUid)
+		: null;
+	const item = cachedDetail || null;
+	const previewName =
+		cachedDetail?.name || catalogItem?.name || "this resource";
+	const detailEntries = getDetailEntries(item?.properties);
+	const primaryHighlights = getPrimaryHighlights(canonicalType, item?.properties);
 
-    const getDetailImg = () => {
-        const name = Details.properties.name.toLowerCase();
-        if (name === "tatooine") return tatooineImg;
-        if (name === "cr90 corvette") return cr90Img;
-        if (name === "star destroyer") return starDestroyerImg;
+	useEffect(() => {
+		if (!isSupportedType(canonicalType)) {
+			return;
+		}
 
-        return `https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/${categoryId}/${theId}.jpg`;
-    };
+		if (cachedDetail) {
+			return;
+		}
 
-    const getDetails = async () => {
-        const apiCategory = categoryId === "characters" ? "people" : categoryId;
-        const data = await fetch(`https://www.swapi.tech/api/${apiCategory}/${theId}`);
-        const result = await data.json();
-        setDetails(result.result);
-    };
+		void loadDetail(dispatch, {
+			type: canonicalType,
+			uid: safeUid,
+			cachedDetail
+		});
+	}, [cachedDetail, canonicalType, dispatch, safeUid]);
 
-    const getDescription = () => {
-        if (categoryId === "characters") {
-            return `A legendary figure whose name echoes through the Force, representing the vast diversity of life across the stars. Throughout history, individuals like this have shaped the destiny of the galaxy, navigating the delicate balance between the Light and Dark sides while forging their own path in an era of constant turmoil.`;
-        }
-        if (categoryId === "planets") {
-            return `From the desolate, twin-sunned sands of the Outer Rim to the lush, sprawling jungles of the Core Worlds, every planet tells a unique story that spans millennia. These celestial bodies serve as the stage for epic conflicts and the cradle of diverse civilizations.`;
-        }
-        return `Engineering marvels designed to conquer the infinite void of space, these vessels represent the absolute pinnacle of galactic technology and ambition. Equipped with advanced hyperdrive systems, starships are the indispensable lifelines of interstellar society.`;
-    };
+	if (!isSupportedType(canonicalType)) {
+		return (
+			<div className="container py-5">
+				<div className="feedback-panel text-center">
+					<h1 className="h4 mb-2">Unsupported route</h1>
+					<p className="text-light-emphasis mb-4">
+						Choose a character, planet or vehicle from the main catalog.
+					</p>
+					<Link to="/" className="btn btn-outline-warning">
+						Back to home
+					</Link>
+				</div>
+			</div>
+		);
+	}
 
-    useEffect(() => {
-        getDetails();
-    }, [theId]);
+	if (store.status.detail.isLoading && !item) {
+		return (
+			<div className="container py-5">
+				<div className="feedback-panel text-center">
+					<div className="spinner-border text-warning mb-3" role="status">
+						<span className="visually-hidden">Loading...</span>
+					</div>
+					<h1 className="h4 mb-2">Loading detail page...</h1>
+					<p className="text-light-emphasis mb-0">
+						Recovering {previewName} from the galactic archive.
+					</p>
+				</div>
+			</div>
+		);
+	}
 
-    if (!Details) {
-        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>;
-    }
+	if (store.status.detail.error && !item) {
+		return (
+			<div className="container py-5">
+				<div className="alert alert-danger d-flex justify-content-between align-items-center flex-wrap gap-3">
+					<span>{store.status.detail.error}</span>
+					<button
+						type="button"
+						className="btn btn-outline-danger btn-sm"
+						onClick={() =>
+							loadDetail(dispatch, {
+								type: canonicalType,
+								uid: safeUid,
+								cachedDetail,
+								forceReload: true
+							})
+						}
+					>
+						Retry
+					</button>
+				</div>
+			</div>
+		);
+	}
 
-    return (
-        <div className="container mt-4">
-            <button
-                className="btn btn-outline-warning mb-4"
-                onClick={() => navigate("/")}
-            >
-                <i className="bi bi-arrow-left"></i> Volver a la Galaxia
-            </button>
+	if (!item) {
+		return (
+			<div className="container py-5">
+				<div className="feedback-panel text-center">
+					<h1 className="h4 mb-2">Resource not available</h1>
+					<p className="text-light-emphasis mb-4">
+						The selected entry could not be found in SWAPI.
+					</p>
+					<Link to="/" className="btn btn-outline-warning">
+						Back to home
+					</Link>
+				</div>
+			</div>
+		);
+	}
 
-            <div className="detail-container shadow-lg">
-                <h1>{Details.properties.name.toLowerCase()}</h1>
+	return (
+		<div className="container mt-4">
+			<div className="d-flex gap-2 flex-wrap mb-4">
+				<Link to="/" className="btn btn-outline-warning">
+					<i className="bi bi-arrow-left me-2"></i>
+					Back to the galaxy
+				</Link>
+			</div>
 
-                <div className="row align-items-center mb-4">
-                    <div className="col-md-6 text-center">
-                        <img
-                            src={getDetailImg()}
-                            alt={Details.properties.name}
-                            className="detail-img img-fluid"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
-                            }}
-                        />
-                    </div>
+			<div className="detail-container shadow-lg">
+				<p className="text-uppercase text-warning small mb-2">
+					{RESOURCE_CONFIG[canonicalType].label}
+				</p>
+				<h1>{item.name.toLowerCase()}</h1>
 
-                    <div className="col-md-6">
-                        <div className="detail-description">
-                            {getDescription()}
-                        </div>
-                    </div>
-                </div>
+				<div className="row align-items-center mb-4 g-4">
+					<div className="col-lg-5 text-center">
+						<img
+							src={getResourceImageUrl(canonicalType, safeUid)}
+							alt={item.name}
+							className="detail-img img-fluid"
+							onError={(event) => {
+								event.currentTarget.src = buildFallbackImage(item.name);
+							}}
+						/>
+					</div>
 
-                <hr className="custom-hr" />
+					<div className="col-lg-7">
+						<div className="detail-description">
+							{item.description || getTypeNarrative(canonicalType, item.properties)}
+						</div>
 
-                <div className="row text-center mt-4">
-                    <div className="col">
-                        <div className="detail-label">
-                            {categoryId === "characters" ? "birth year" : categoryId === "planets" ? "climate" : "model"}
-                        </div>
-                        <div className="detail-value">
-                            {categoryId === "characters" ? Details.properties.birth_year : categoryId === "planets" ? Details.properties.climate : Details.properties.model}
-                        </div>
-                    </div>
+						<div className="detail-highlight-grid mt-4">
+							{primaryHighlights.map((highlight) => (
+								<div key={highlight.label} className="detail-highlight">
+									<div className="detail-label">{highlight.label}</div>
+									<div className="detail-value">{highlight.value}</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
 
-                    <div className="col">
-                        <div className="detail-label">
-                            {categoryId === "characters" ? "gender" : categoryId === "planets" ? "terrain" : "class"}
-                        </div>
-                        <div className="detail-value">
-                            {categoryId === "characters" ? Details.properties.gender : categoryId === "planets" ? Details.properties.terrain : Details.properties.starship_class}
-                        </div>
-                    </div>
+				<hr className="custom-hr" />
 
-                    <div className="col">
-                        <div className="detail-label">
-                            {categoryId === "characters" ? "height" : categoryId === "planets" ? "population" : "manufacturer"}
-                        </div>
-                        <div className="detail-value">
-                            {categoryId === "characters" ? Details.properties.height : categoryId === "planets" ? Details.properties.population : Details.properties.manufacturer}
-                        </div>
-                    </div>
-
-                    <div className="col">
-                        <div className="detail-label">
-                            {categoryId === "characters" ? "eye color" : categoryId === "planets" ? "diameter" : "cost"}
-                        </div>
-                        <div className="detail-value">
-                            {categoryId === "characters" ? Details.properties.eye_color : categoryId === "planets" ? Details.properties.diameter : Details.properties.cost_in_credits}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-Detail.propTypes = {
-    match: PropTypes.object
+				<div className="row text-center mt-4 g-3">
+					{detailEntries.map((entry) => (
+						<div key={entry.key} className="col-6 col-lg-3">
+							<div className="detail-stat-card">
+								<div className="detail-label">{entry.label}</div>
+								<div className="detail-value">{entry.value}</div>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
 };

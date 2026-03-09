@@ -1,22 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
-const ScrollToTop = ({ location, children }) => {
-    const prevLocation = useRef(location);
+const ScrollToTop = ({ children }) => {
+	const { pathname } = useLocation();
 
-    useEffect(() => {
-        if (location !== prevLocation.current) {
-            window.scrollTo(0, 0);
-        }
-        prevLocation.current = location;
-    }, [location]);
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	}, [pathname]);
 
-    return children;
+	return <>{children}</>;
 };
 
 export default ScrollToTop;
 
 ScrollToTop.propTypes = {
-    location: PropTypes.object,
-    children: PropTypes.any
+	children: PropTypes.node.isRequired
 };
