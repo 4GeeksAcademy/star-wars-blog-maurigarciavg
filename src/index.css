@@ -42,6 +42,31 @@ body {
     max-width: 95%;
 }
 
+.hero-panel {
+    border: 1px solid rgba(255, 193, 7, 0.35);
+}
+
+.catalog-status {
+    min-width: 180px;
+}
+
+.feedback-panel,
+.empty-strip {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 193, 7, 0.25);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.empty-strip {
+    width: 100%;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d9d9d9;
+}
+
 .img-container {
     height: 320px;
     background-color: #000;
@@ -163,6 +188,21 @@ body {
     margin-bottom: 120px;
 }
 
+.detail-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.detail-highlight,
+.detail-stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 193, 7, 0.18);
+    border-radius: 16px;
+    padding: 1rem;
+    height: 100%;
+}
+
 .detail-container h1 {
     font-family: 'Star Wars', sans-serif;
     color: #ffc107;
@@ -190,6 +230,15 @@ footer {
     margin-top: 100px;
     padding: 40px 0;
     background: rgba(0, 0, 0, 0.7);
+}
+
+.footer-link {
+    color: #ffc107;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: #ffffff;
 }
 
 .btn-heart:active {
@@ -245,4 +294,29 @@ footer {
     filter: brightness(1.2);
     transform: scale(1.1);
     transition: all 0.2s ease;
+}
+
+@media (max-width: 991px) {
+    .detail-container {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-logo {
+        width: 180px;
+    }
+
+    .carousel-card {
+        min-width: 280px;
+        max-width: 280px;
+    }
+
+    .carousel-btn {
+        display: none;
+    }
+
+    .detail-container h1 {
+        font-size: 2.2rem;
+    }
 }

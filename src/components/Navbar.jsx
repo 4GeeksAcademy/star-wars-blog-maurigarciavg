@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import starWarsLogo from "/src/assets/img/star-wars-logo.png";
+import { ACTION_TYPES } from "../store";
+import { normalizeResourceType } from "../services/swapi";
+import starWarsLogo from "../assets/img/star-wars-logo.png";
 
 export const Navbar = () => {
-	const { store, actions } = useGlobalReducer();
+	const { store, dispatch } = useGlobalReducer();
 
 	return (
 		<nav className="navbar navbar-dark">
@@ -30,17 +32,25 @@ export const Navbar = () => {
 							{store.favorites.length === 0 ? (
 								<li><span className="dropdown-item text-secondary">No favorites yet</span></li>
 							) : (
-								store.favorites.map((fav, index) => (
-									<li key={index} className="d-flex justify-content-between align-items-center pe-2">
+								store.favorites.map((fav) => (
+									<li
+										key={`${fav.type}-${fav.uid}`}
+										className="d-flex justify-content-between align-items-center pe-2"
+									>
 										<Link
-											to={`/${fav.category}/${fav.uid}`}
+											to={`/${normalizeResourceType(fav.type)}/${fav.uid}`}
 											className="dropdown-item text-warning sw-text"
 										>
 											{fav.name}
 										</Link>
 										<i
 											className="bi bi-trash3 text-danger cursor-pointer"
-											onClick={() => actions.deleteFavorite(fav.uid)}
+											onClick={() =>
+												dispatch({
+													type: ACTION_TYPES.removeFavorite,
+													payload: { uid: fav.uid, type: fav.type }
+												})
+											}
 										></i>
 									</li>
 								))

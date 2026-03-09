@@ -1,64 +1,80 @@
-import tatooineImg from "../assets/img/Tatooine.webp";
-import cr90Img from "../assets/img/cr90_corvette.jpg";
-import starDestroyerImg from "../assets/img/star_destroyer.jpg";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { ACTION_TYPES } from "../store";
+import {
+	buildFallbackImage,
+	getResourceImageUrl,
+	RESOURCE_CONFIG
+} from "../services/swapi";
 
-export const Card = (props) => {
-    const { store, actions } = useGlobalReducer();
+export const Card = ({ item }) => {
+	const { store, dispatch } = useGlobalReducer();
+	const isFavorite = store.favorites.some(
+		(favorite) => favorite.uid === item.uid && favorite.type === item.type
+	);
 
-    const getImageUrl = () => {
-        const name = props.name.toLowerCase();
+	const handleFavoriteClick = () => {
+		dispatch({
+			type: ACTION_TYPES.toggleFavorite,
+			payload: {
+				name: item.name,
+				uid: item.uid,
+				type: item.type
+			}
+		});
+	};
 
-        if (name === "tatooine") return tatooineImg;
-        if (name === "cr90 corvette") return cr90Img;
-        if (name === "star destroyer") return starDestroyerImg;
+	return (
+		<div className="carousel-card">
+			<div className="card h-100 bg-dark border-secondary">
+				<div className="img-container">
+					<img
+						src={getResourceImageUrl(item.type, item.uid)}
+						onError={(event) => {
+							event.currentTarget.src = buildFallbackImage(item.name);
+						}}
+						alt={item.name}
+					/>
+				</div>
+				<div className="card-body d-flex flex-column text-center">
+					<p className="text-uppercase text-warning small mb-2">
+						{RESOURCE_CONFIG[item.type].label}
+					</p>
+					<h5 className="card-title sw-title text-warning">
+						{item.name.toLowerCase()}
+					</h5>
+					<p className="card-text sw-text text-limit">
+						{RESOURCE_CONFIG[item.type].cardDescription}
+					</p>
+					<div className="card-footer-custom">
+						<Link to={`/${item.type}/${item.uid}`} className="btn btn-outline-warning">
+							View detail
+						</Link>
+						<button
+							type="button"
+							className={`btn-heart ${isFavorite ? "active" : ""}`}
+							onClick={handleFavoriteClick}
+							aria-pressed={isFavorite}
+							aria-label={
+								isFavorite
+									? `Remove ${item.name} from favorites`
+									: `Add ${item.name} to favorites`
+							}
+						>
+							<i className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 
-        return `https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`;
-    };
-    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category);
-
-    const handleFavoriteClick = () => {
-        if (isFavorite) {
-            actions.deleteFavorite(props.uid);
-        } else {
-            actions.addFavorite({
-                name: props.name,
-                uid: props.uid,
-                category: props.category
-            });
-        }
-    };
-
-    return (
-        <div className="carousel-card">
-            <div className="card h-100 bg-dark border-secondary">
-                <div className="img-container">
-                    <img
-                        src={getImageUrl()}
-                        onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
-                        }}
-                        alt={props.name}
-                    />
-                </div>
-                <div className="card-body d-flex flex-column text-center">
-                    <h5 className="card-title sw-title text-warning">{props.name.toLowerCase()}</h5>
-                    <p className="card-text sw-text text-limit">{props.description}</p>
-                    <div className="card-footer-custom">
-                        <Link to={`/${props.category}/${props.uid}`} className="btn btn-outline-warning">
-                            Ver detalles
-                        </Link>
-                        <button
-                            className={`btn-heart ${isFavorite ? "active" : ""}`}
-                            onClick={handleFavoriteClick}
-                        >
-                            <i className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+Card.propTypes = {
+	item: PropTypes.shape({
+		uid: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired
+	}).isRequired
 };
