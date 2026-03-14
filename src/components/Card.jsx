@@ -10,13 +10,13 @@ export const Card = (props) => {
     const getImageUrl = () => {
         const name = props.name.toLowerCase();
 
-        if (name === "tatooine") return tatooineImg;
-        if (name === "cr90 corvette") return cr90Img;
-        if (name === "star destroyer") return starDestroyerImg;
+        if (name === "tatooine") return tatooineImg; // ✅ Buen uso de imágenes locales
+        if (name === "cr90 corvette") return cr90Img; // ✅ Buen uso de imágenes locales
+        if (name === "star destroyer") return starDestroyerImg; // ✅ Buen uso de imágenes locales
 
         return `https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`;
     };
-    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category);
+    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category); // ✅ Buena lógica para verificar favoritos
 
     const handleFavoriteClick = () => {
         if (isFavorite) {

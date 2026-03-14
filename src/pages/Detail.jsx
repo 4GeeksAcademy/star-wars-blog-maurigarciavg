@@ -8,12 +8,12 @@ import './detail.css';
 
 export const Detail = () => {
     const { categoryId, theId } = useParams();
-    const [Details, setDetails] = useState(null);
+    const [Details, setDetails] = useState(null); // ✅ Buen uso de useState para manejar el estado
     const navigate = useNavigate();
 
     const getDetailImg = () => {
-        const name = Details.properties.name.toLowerCase();
-        if (name === "tatooine") return tatooineImg;
+        const name = Details.properties.name.toLowerCase(); // 📝 Convierte el nombre a minúsculas para comparación
+        if (name === "tatooine") return tatooineImg; // ✅ Buen uso de imágenes específicas
         if (name === "cr90 corvette") return cr90Img;
         if (name === "star destroyer") return starDestroyerImg;
 
@@ -21,10 +21,10 @@ export const Detail = () => {
     };
 
     const getDetails = async () => {
-        const apiCategory = categoryId === "characters" ? "people" : categoryId;
+        const apiCategory = categoryId === "characters" ? "people" : categoryId; // 📝 Asigna correctamente la categoría de la API
         const data = await fetch(`https://www.swapi.tech/api/${apiCategory}/${theId}`);
         const result = await data.json();
-        setDetails(result.result);
+        setDetails(result.result); // ✅ Buen manejo de la respuesta de la API
     };
 
     const getDescription = () => {
@@ -32,17 +32,17 @@ export const Detail = () => {
             return `A legendary figure whose name echoes through the Force, representing the vast diversity of life across the stars. Throughout history, individuals like this have shaped the destiny of the galaxy, navigating the delicate balance between the Light and Dark sides while forging their own path in an era of constant turmoil.`;
         }
         if (categoryId === "planets") {
-            return `From the desolate, twin-sunned sands of the Outer Rim to the lush, sprawling jungles of the Core Worlds, every planet tells a unique story that spans millennia. These celestial bodies serve as the stage for epic conflicts and the cradle of diverse civilizations.`;
+            return `From the desolate, twin-sunned sands of the Outer Rim to the lush, sprawling jungles of the Core Worlds, every planet tells a unique story that spans millennia. Estos cuerpos celestes sirven como el escenario para conflictos épicos y la cuna de diversas civilizaciones.`;
         }
         return `Engineering marvels designed to conquer the infinite void of space, these vessels represent the absolute pinnacle of galactic technology and ambition. Equipped with advanced hyperdrive systems, starships are the indispensable lifelines of interstellar society.`;
     };
 
     useEffect(() => {
-        getDetails();
+        getDetails(); // ✅ Llama a la función para obtener detalles al cargar el componente
     }, [theId]);
 
     if (!Details) {
-        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>;
+        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>; // 📝 Mensaje de carga claro
     }
 
     return (
@@ -65,7 +65,7 @@ export const Detail = () => {
                             className="detail-img img-fluid"
                             onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+                                e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg"; // 📝 Manejo de error de imagen
                             }}
                         />
                     </div>
@@ -122,5 +122,6 @@ export const Detail = () => {
 };
 
 Detail.propTypes = {
-    match: PropTypes.object
+    match: PropTypes.object // 💡 Considera definir las propiedades esperadas para mejorar la validación
 };
+
