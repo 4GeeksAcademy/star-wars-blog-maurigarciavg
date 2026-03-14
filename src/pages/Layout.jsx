@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom/dist"
-import ScrollToTop from "../components/ScrollToTop"
-import { Navbar } from "../components/Navbar"
-import { Footer } from "../components/Footer"
+import { Outlet } from "react-router-dom"; // 📝 Importa Outlet correctamente sin la ruta completa
+import ScrollToTop from "../components/ScrollToTop"; // ✅ Buen uso de ScrollToTop
+import { Navbar } from "../components/Navbar"; // ✅ Buen uso de Navbar
+import { Footer } from "../components/Footer"; // ✅ Buen uso de Footer
 
 export const Layout = () => {
     return (
@@ -9,10 +9,10 @@ export const Layout = () => {
             <ScrollToTop>
                 <Navbar />
                 <main className="flex-grow-1">
-                    <Outlet />
+                    <Outlet /> // ✅ Outlet permite renderizar rutas hijas
                 </main>
                 <Footer />
             </ScrollToTop>
         </div>
-    )
-}
+    );
+};

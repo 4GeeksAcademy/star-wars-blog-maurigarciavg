@@ -1,58 +1,58 @@
 .detail-container {
-    background-color: rgba(0, 0, 0, 0.8) !important;
-    border: 2px solid #ffc107 !important;
-    border-radius: 20px;
-    padding: 40px;
-    color: white;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 20px rgba(255, 193, 7, 0.2);
+    background-color: rgba(0, 0, 0, 0.8) !important; // ✅ Buen uso de color de fondo
+    border: 2px solid #ffc107 !important; // ✅ Buen contraste en el borde
+    border-radius: 20px; // ✅ Buen uso de bordes redondeados
+    padding: 40px; // ✅ Espaciado adecuado
+    color: white; // ✅ Color de texto legible
+    backdrop-filter: blur(15px); // ✅ Efecto visual atractivo
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.2); // ✅ Sombra que añade profundidad
 }
 
 .detail-container h1 {
-    font-family: 'Star Wars', sans-serif;
-    color: #ffc107;
-    font-size: 3rem;
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: lowercase;
-    letter-spacing: 4px;
+    font-family: 'Star Wars', sans-serif; // ✅ Uso de fuente temática
+    color: #ffc107; // ✅ Color que resalta
+    font-size: 3rem; // ✅ Tamaño de fuente adecuado
+    margin-bottom: 30px; // ✅ Espaciado inferior
+    text-align: center; // ✅ Alineación centrada
+    text-transform: lowercase; // 💡 Considera usar 'capitalize' para títulos
+    letter-spacing: 4px; // ✅ Buen uso de espaciado entre letras
 }
 
 .detail-img {
-    width: 100%;
-    max-height: 450px;
-    object-fit: contain;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 193, 7, 0.5);
-    background-color: #000;
+    width: 100%; // ✅ Imagen ocupa todo el ancho
+    max-height: 450px; // ✅ Limitar altura para mantener proporciones
+    object-fit: contain; // ✅ Mantiene la relación de aspecto
+    border-radius: 15px; // ✅ Bordes redondeados
+    border: 1px solid rgba(255, 193, 7, 0.5); // ✅ Buen contraste en el borde
+    background-color: #000; // ✅ Fondo que resalta la imagen
 }
 
 .detail-description {
-    font-family: 'Segoe UI', sans-serif;
-    color: #e0e0e0;
-    font-size: 1.15rem;
-    line-height: 1.6;
-    text-align: justify;
-    padding-left: 20px;
+    font-family: 'Segoe UI', sans-serif; // ✅ Buena elección de fuente
+    color: #e0e0e0; // ✅ Color de texto claro
+    font-size: 1.15rem; // ✅ Tamaño de fuente legible
+    line-height: 1.6; // ✅ Espaciado entre líneas adecuado
+    text-align: justify; // ✅ Justificación que mejora la lectura
+    padding-left: 20px; // ✅ Espaciado a la izquierda
 }
 
 .detail-label {
-    color: #ff4444 !important;
-    font-family: 'Star Wars', sans-serif;
-    text-transform: lowercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
+    color: #ff4444 !important; // ✅ Color que destaca
+    font-family: 'Star Wars', sans-serif; // ✅ Uso de fuente temática
+    text-transform: lowercase; // 💡 Considera usar 'capitalize' para etiquetas
+    font-size: 0.9rem; // ✅ Tamaño de fuente adecuado
+    letter-spacing: 1px; // ✅ Espaciado entre letras
+    margin-bottom: 5px; // ✅ Espaciado inferior
 }
 
 .detail-value {
-    color: #ffffff !important;
-    font-weight: bold;
-    font-size: 1.1rem;
+    color: #ffffff !important; // ✅ Color de texto legible
+    font-weight: bold; // ✅ Texto en negrita para resaltar
+    font-size: 1.1rem; // ✅ Tamaño de fuente adecuado
 }
 
 hr.custom-hr {
-    border-top: 2px solid #ff4444;
-    opacity: 0.7;
-    margin: 40px 0;
+    border-top: 2px solid #ff4444; // ✅ Buen uso de color en la línea horizontal
+    opacity: 0.7; // ✅ Opacidad que añade sutileza
+    margin: 40px 0; // ✅ Espaciado vertical adecuado
 }

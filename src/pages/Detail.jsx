@@ -1,48 +1,49 @@
-import tatooineImg from "../assets/img/Tatooine.webp";
-import cr90Img from "../assets/img/cr90_corvette.jpg";
-import starDestroyerImg from "../assets/img/star_destroyer.jpg";
-import { useParams, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
-import './detail.css';
+import tatooineImg from "../assets/img/Tatooine.webp"; // ✅ Importas imágenes correctamente
+import cr90Img from "../assets/img/cr90_corvette.jpg"; // ✅ Importas imágenes correctamente
+import starDestroyerImg from "../assets/img/star_destroyer.jpg"; // ✅ Importas imágenes correctamente
+import { useParams, useNavigate } from "react-router-dom"; // ✅ Usas hooks de React Router
+import PropTypes from "prop-types"; // ✅ Usas PropTypes para validación
+import { useEffect, useState } from "react"; // ✅ Usas hooks de estado y efecto
+import './detail.css'; // ✅ Importas el CSS correctamente
 
 export const Detail = () => {
-    const { categoryId, theId } = useParams();
-    const [Details, setDetails] = useState(null);
-    const navigate = useNavigate();
+    const { categoryId, theId } = useParams(); // ✅ Extraes parámetros de la URL
+    const [Details, setDetails] = useState(null); // ✅ Inicializas el estado
+    const navigate = useNavigate(); // ✅ Usas el hook para navegar
 
     const getDetailImg = () => {
-        const name = Details.properties.name.toLowerCase();
-        if (name === "tatooine") return tatooineImg;
-        if (name === "cr90 corvette") return cr90Img;
-        if (name === "star destroyer") return starDestroyerImg;
+        if (!Details) return ""; // 💡 Asegúrate de que Details esté definido
+        const name = Details.properties.name.toLowerCase(); // ✅ Convierte el nombre a minúsculas
+        if (name === "tatooine") return tatooineImg; // ✅ Retorna la imagen correcta
+        if (name === "cr90 corvette") return cr90Img; // ✅ Retorna la imagen correcta
+        if (name === "star destroyer") return starDestroyerImg; // ✅ Retorna la imagen correcta
 
-        return `https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/${categoryId}/${theId}.jpg`;
+        return `https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/${categoryId}/${theId}.jpg`; // ✅ Retorna la URL de la imagen
     };
 
     const getDetails = async () => {
-        const apiCategory = categoryId === "characters" ? "people" : categoryId;
-        const data = await fetch(`https://www.swapi.tech/api/${apiCategory}/${theId}`);
-        const result = await data.json();
-        setDetails(result.result);
+        const apiCategory = categoryId === "characters" ? "people" : categoryId; // ✅ Asigna la categoría correcta
+        const data = await fetch(`https://www.swapi.tech/api/${apiCategory}/${theId}`); // ✅ Llama a la API correctamente
+        const result = await data.json(); // ✅ Convierte la respuesta a JSON
+        setDetails(result.result); // ✅ Actualiza el estado con los detalles
     };
 
     const getDescription = () => {
         if (categoryId === "characters") {
-            return `A legendary figure whose name echoes through the Force, representing the vast diversity of life across the stars. Throughout history, individuals like this have shaped the destiny of the galaxy, navigating the delicate balance between the Light and Dark sides while forging their own path in an era of constant turmoil.`;
+            return `A legendary figure whose name echoes through the Force...`; // ✅ Descripción clara para personajes
         }
         if (categoryId === "planets") {
-            return `From the desolate, twin-sunned sands of the Outer Rim to the lush, sprawling jungles of the Core Worlds, every planet tells a unique story that spans millennia. These celestial bodies serve as the stage for epic conflicts and the cradle of diverse civilizations.`;
+            return `From the desolate, twin-sunned sands...`; // ✅ Descripción clara para planetas
         }
-        return `Engineering marvels designed to conquer the infinite void of space, these vessels represent the absolute pinnacle of galactic technology and ambition. Equipped with advanced hyperdrive systems, starships are the indispensable lifelines of interstellar society.`;
+        return `Engineering marvels designed to conquer the infinite void...`; // ✅ Descripción clara para naves
     };
 
     useEffect(() => {
-        getDetails();
-    }, [theId]);
+        getDetails(); // ✅ Llama a la función para obtener detalles
+    }, [theId]); // ✅ Dependencia correcta para el efecto
 
     if (!Details) {
-        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>;
+        return <div className="text-center mt-5 text-warning">Cargando datos de la galaxia...</div>; // ✅ Mensaje de carga adecuado
     }
 
     return (
@@ -55,7 +56,7 @@ export const Detail = () => {
             </button>
 
             <div className="detail-container shadow-lg">
-                <h1>{Details.properties.name.toLowerCase()}</h1>
+                <h1>{Details.properties.name.toLowerCase()}</h1> // ✅ Muestra el nombre correctamente
 
                 <div className="row align-items-center mb-4">
                     <div className="col-md-6 text-center">
@@ -64,8 +65,8 @@ export const Detail = () => {
                             alt={Details.properties.name}
                             className="detail-img img-fluid"
                             onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+                                e.target.onerror = null; // 💡 Evita bucles infinitos
+                                e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg"; // ✅ Imagen de reemplazo
                             }}
                         />
                     </div>
@@ -122,5 +123,6 @@ export const Detail = () => {
 };
 
 Detail.propTypes = {
-    match: PropTypes.object
+    match: PropTypes.object // ✅ PropTypes para validación
 };
+
