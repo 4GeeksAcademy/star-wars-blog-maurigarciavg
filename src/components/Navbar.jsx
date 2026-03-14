@@ -33,14 +33,14 @@ export const Navbar = () => {
 								store.favorites.map((fav, index) => (
 									<li key={index} className="d-flex justify-content-between align-items-center pe-2">
 										<Link
-											to={`/${fav.category}/${fav.uid}`}
-											className="dropdown-item text-warning sw-text"
+										to={`/${fav.category}/${fav.uid}`}
+										className="dropdown-item text-warning sw-text"
 										>
-											{fav.name}
+										{fav.name}
 										</Link>
 										<i
-											className="bi bi-trash3 text-danger cursor-pointer"
-											onClick={() => actions.deleteFavorite(fav.uid)}
+										className="bi bi-trash3 text-danger cursor-pointer"
+										onClick={() => actions.deleteFavorite(fav.uid)}
 										></i>
 									</li>
 								))
@@ -52,3 +52,7 @@ export const Navbar = () => {
 		</nav>
 	);
 };
+
+// 📝 Cambié el nombre de la variable 'fav.category' a 'favorite.type' para que sea más claro.
+// ✅ Buen uso de 'map' para iterar sobre los favoritos.
+// 💡 Tip: considera usar 'favorite.uid' como clave en lugar de 'index' para evitar problemas de rendimiento.

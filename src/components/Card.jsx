@@ -10,13 +10,13 @@ export const Card = (props) => {
     const getImageUrl = () => {
         const name = props.name.toLowerCase();
 
-        if (name === "tatooine") return tatooineImg;
-        if (name === "cr90 corvette") return cr90Img;
-        if (name === "star destroyer") return starDestroyerImg;
+        if (name === "tatooine") return tatooineImg; // ✅ Buen uso de imágenes específicas
+        if (name === "cr90 corvette") return cr90Img; // ✅ Buen uso de imágenes específicas
+        if (name === "star destroyer") return starDestroyerImg; // ✅ Buen uso de imágenes específicas
 
         return `https://raw.githubusercontent.com/tbone849/star-wars-guide/master/build/assets/img/${props.category}/${props.uid}.jpg`;
     };
-    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category);
+    const isFavorite = store.favorites.some(fav => fav.uid === props.uid && fav.category === props.category); // ✅ Buena lógica para verificar favoritos
 
     const handleFavoriteClick = () => {
         if (isFavorite) {
@@ -38,7 +38,7 @@ export const Card = (props) => {
                         src={getImageUrl()}
                         onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+                            e.target.src = "https://starwars-visualguide.com/assets/img/placeholder.jpg"; // 💡 Considera usar una imagen de respaldo más representativa
                         }}
                         alt={props.name}
                     />
